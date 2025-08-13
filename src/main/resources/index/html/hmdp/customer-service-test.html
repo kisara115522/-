@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>客服功能测试</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        .test-info {
+            background: #f0f8ff;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .features {
+            background: #f9f9f9;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .features h3 {
+            color: #333;
+            margin-top: 0;
+        }
+
+        .features ul {
+            margin: 10px 0;
+            padding-left: 20px;
+        }
+
+        .features li {
+            margin-bottom: 8px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="test-info">
+        <h1>🎉 客服功能测试页面</h1>
+        <p>这是一个测试页面，用于验证客服聊天功能是否正常工作。</p>
+    </div>
+
+    <div class="features">
+        <h3>✨ 功能特性</h3>
+        <ul>
+            <li><strong>可拖拽客服按钮</strong>：右下角的客服按钮现在可以通过鼠标拖拽到任意位置</li>
+            <li><strong>智能对话</strong>：支持AI智能回复，具有上下文记忆功能</li>
+            <li><strong>流式响应</strong>：实时显示AI回复内容</li>
+            <li><strong>响应式设计</strong>：支持电脑和手机端</li>
+            <li><strong>会话记忆</strong>：同一浏览器下的对话会被记住</li>
+        </ul>
+    </div>
+
+    <div class="features">
+        <h3>🔧 使用说明</h3>
+        <ul>
+            <li>查看右下角是否有紫色的客服按钮 💬</li>
+            <li>尝试拖拽按钮到其他位置</li>
+            <li>点击按钮打开聊天窗口</li>
+            <li>发送测试消息验证对话功能</li>
+            <li>检查AI是否能正常回复</li>
+        </ul>
+    </div>
+
+    <div class="features">
+        <h3>🐛 故障排查</h3>
+        <ul>
+            <li><strong>按钮不显示</strong>：检查浏览器控制台是否有JS错误</li>
+            <li><strong>无法拖拽</strong>：确保鼠标按下并移动超过5px距离</li>
+            <li><strong>无法发送消息</strong>：检查后端服务是否正常运行</li>
+            <li><strong>AI不回复</strong>：检查API密钥是否正确配置</li>
+        </ul>
+    </div>
+
+    <script>
+        // 添加一些测试信息到控制台
+        console.log('🔍 客服功能测试页面加载完成');
+        console.log('📡 后端API地址: /chat');
+        console.log('🔑 Memory ID 存储键: customer-service-memory-id');
+
+        // 监听客服组件加载
+        document.addEventListener('DOMContentLoaded', function () {
+            setTimeout(() => {
+                const customerBtn = document.querySelector('.cs-widget-button');
+                if (customerBtn) {
+                    console.log('✅ 客服按钮加载成功');
+                } else {
+                    console.log('❌ 客服按钮未找到，请检查JS文件是否正确加载');
+                }
+            }, 1000);
+        });
+    </script>
+
+    <!-- 客服聊天组件 -->
+    <script src="./js/customer-service-widget.js"></script>
+</body>
+
+</html>
