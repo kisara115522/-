@@ -37,7 +37,7 @@ public class AIConfig {
 
     @Bean
     public ChatMemory chatMemory() {
-        MessageWindowChatMemory memory=MessageWindowChatMemory.builder()
+        MessageWindowChatMemory memory = MessageWindowChatMemory.builder()
                 .maxMessages(20)
                 .build();
         return memory;
@@ -45,13 +45,13 @@ public class AIConfig {
 
     @Bean
     public ChatMemoryProvider redisChatMemoryStore() {
-        ChatMemoryProvider memory= new ChatMemoryProvider() {
+        ChatMemoryProvider memory = new ChatMemoryProvider() {
             @Override
-            public ChatMemory get(Object memroyId) {
+            public ChatMemory get(Object memoryId) {
                 return MessageWindowChatMemory.builder()
                         .chatMemoryStore(redisChatMemoryStore)
                         .maxMessages(20)
-                        .id(memroyId)
+                        .id(memoryId)
                         .build();
             }
         };
@@ -60,14 +60,13 @@ public class AIConfig {
 
     @Bean
     public EmbeddingStore store() {
-        InMemoryEmbeddingStore store=new InMemoryEmbeddingStore();
+        InMemoryEmbeddingStore store = new InMemoryEmbeddingStore();
         List<Document> documents = ClassPathDocumentLoader.loadDocuments("content");
-        EmbeddingStoreIngestor ingestor=EmbeddingStoreIngestor.builder()
+        EmbeddingStoreIngestor ingestor = EmbeddingStoreIngestor.builder()
                 .embeddingStore(store)
                 .embeddingModel(embeddingModel).build();
         ingestor.ingest(documents);
         return store;
     }
-
 
 }

@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>会话隔离测试</title>
+    <style>
+        body {
+            font-family: 'Microsoft YaHei', sans-serif;
+            padding: 20px;
+            line-height: 1.6;
+            background: #f5f7fa;
+        }
+
+        .test-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .title {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+            font-size: 24px;
+        }
+
+        .test-section {
+            background: #f8f9ff;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+
+        .test-section h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+
+        .test-steps {
+            list-style: none;
+            padding: 0;
+        }
+
+        .test-steps li {
+            margin: 10px 0;
+            padding: 10px;
+            background: white;
+            border-left: 4px solid #667eea;
+            border-radius: 4px;
+        }
+
+        .session-info {
+            background: #e8f4fd;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border: 1px solid #b3d9f7;
+        }
+
+        .session-info h4 {
+            color: #1976d2;
+            margin-bottom: 10px;
+        }
+
+        .session-id {
+            font-family: monospace;
+            background: #fff;
+            padding: 5px 10px;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+            display: inline-block;
+        }
+
+        .test-button {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px;
+            transition: transform 0.2s;
+        }
+
+        .test-button:hover {
+            transform: translateY(-2px);
+        }
+
+        .status {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .status.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .status.warning {
+            background: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeaa7;
+        }
+
+        .tips {
+            background: #fff8e1;
+            border: 1px solid #ffcc02;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 20px 0;
+        }
+
+        .tips h4 {
+            color: #f57f17;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="test-container">
+        <h1 class="title">🔒 会话隔离测试页面</h1>
+
+        <div class="session-info">
+            <h4>当前会话信息</h4>
+            <p><strong>会话ID：</strong><span class="session-id" id="currentSessionId">加载中...</span></p>
+            <p><strong>页面加载时间：</strong><span id="loadTime">加载中...</span></p>
+            <p><strong>状态：</strong><span class="status success" id="sessionStatus">新会话已创建</span></p>
+        </div>
+
+        <div class="test-section">
+            <h3>📋 测试步骤</h3>
+            <ol class="test-steps">
+                <li><strong>步骤1：</strong> 打开客服对话，发送消息"我叫张三"</li>
+                <li><strong>步骤2：</strong> 继续发送消息"记住我的名字"</li>
+                <li><strong>步骤3：</strong> 点击重置会话按钮 🔄</li>
+                <li><strong>步骤4：</strong> 发送消息"你还记得我的名字吗？"</li>
+                <li><strong>步骤5：</strong> 刷新页面，再次询问"你记得我的名字吗？"</li>
+            </ol>
+        </div>
+
+        <div class="test-section">
+            <h3>🎯 预期结果</h3>
+            <ul class="test-steps">
+                <li><strong>重置后：</strong> AI应该回答不记得您的名字（会话已重置）</li>
+                <li><strong>刷新后：</strong> AI也应该回答不记得您的名字（新会话）</li>
+                <li><strong>控制台：</strong> 可以看到不同的会话ID</li>
+            </ul>
+        </div>
+
+        <div class="tips">
+            <h4>💡 测试技巧</h4>
+            <p>• 按F12打开开发者工具查看控制台日志</p>
+            <p>• 会话ID应该以"session-"开头</p>
+            <p>• 每次刷新页面都会生成新的会话ID</p>
+            <p>• 重置会话后会话ID也会改变</p>
+        </div>
+
+        <div style="text-align: center; margin-top: 30px;">
+            <button class="test-button" onclick="openConsole()">打开控制台查看日志</button>
+            <button class="test-button" onclick="refreshPage()">刷新页面测试</button>
+            <button class="test-button" onclick="window.location.href='index.html'">返回首页</button>
+        </div>
+    </div>
+
+    <!-- 客服聊天组件 -->
+    <script src="./js/customer-service-widget.js"></script>
+
+    <script>
+        // 页面加载完成后获取会话信息
+        document.addEventListener('DOMContentLoaded', function () {
+            setTimeout(() => {
+                // 获取客服组件实例
+                const widget = window.customerServiceWidget;
+                if (widget && widget.memoryId) {
+                    document.getElementById('currentSessionId').textContent = widget.memoryId;
+                } else {
+                    document.getElementById('currentSessionId').textContent = '获取失败';
+                    document.getElementById('sessionStatus').textContent = '会话创建失败';
+                    document.getElementById('sessionStatus').className = 'status warning';
+                }
+
+                document.getElementById('loadTime').textContent = new Date().toLocaleString();
+            }, 1000);
+
+            // 监听控制台日志
+            console.log('=== 会话隔离测试页面 ===');
+            console.log('页面加载时间:', new Date().toLocaleString());
+        });
+
+        function openConsole() {
+            alert('请按F12键打开开发者工具，然后查看Console标签页的日志信息');
+        }
+
+        function refreshPage() {
+            console.log('=== 手动刷新页面测试 ===');
+            location.reload();
+        }
+
+        // 监听会话重置事件
+        document.addEventListener('sessionReset', function (event) {
+            console.log('会话重置事件触发:', event.detail);
+            document.getElementById('currentSessionId').textContent = event.detail.newMemoryId;
+            document.getElementById('sessionStatus').textContent = '会话已重置';
+        });
+    </script>
+</body>
+
+</html>

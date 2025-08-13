@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>会话重置测试</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #f0f2f5;
+        }
+
+        .test-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .test-section {
+            margin-bottom: 30px;
+            padding: 15px;
+            border: 2px solid #e1e8ed;
+            border-radius: 8px;
+        }
+
+        .test-title {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .test-instructions {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        .test-steps {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+
+        .test-steps ol {
+            margin: 0;
+            padding-left: 20px;
+        }
+
+        .test-steps li {
+            margin-bottom: 8px;
+        }
+
+        .expected-result {
+            background: #e8f5e8;
+            border-left: 4px solid #28a745;
+            padding: 15px;
+            margin: 10px 0;
+        }
+
+        .status-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+
+        .status-pending {
+            background: #ffc107;
+        }
+
+        .status-pass {
+            background: #28a745;
+        }
+
+        .status-fail {
+            background: #dc3545;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="test-container">
+        <h1>🧪 AI智能客服 - 会话重置功能测试</h1>
+
+        <div class="test-section">
+            <div class="test-title">
+                <span class="status-indicator status-pending"></span>
+                测试 1: 基本对话功能
+            </div>
+            <div class="test-instructions">
+                验证AI客服的基本对话能力是否正常工作
+            </div>
+            <div class="test-steps">
+                <ol>
+                    <li>点击右下角的客服按钮打开聊天窗口</li>
+                    <li>发送几条测试消息（例如："你好"、"推荐一些店铺"等）</li>
+                    <li>等待AI助手回复</li>
+                    <li>确认对话记录正常显示在聊天窗口中</li>
+                </ol>
+            </div>
+            <div class="expected-result">
+                <strong>预期结果：</strong>
+                <ul>
+                    <li>✅ AI助手正常回复用户消息</li>
+                    <li>✅ 对话记录按时间顺序显示</li>
+                    <li>✅ 用户消息显示在右侧（蓝色气泡）</li>
+                    <li>✅ AI回复显示在左侧（白色气泡）</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="test-section">
+            <div class="test-title">
+                <span class="status-indicator status-pending"></span>
+                测试 2: 会话重置功能
+            </div>
+            <div class="test-instructions">
+                验证重置会话按钮是否正确清空对话记录并开始新会话
+            </div>
+            <div class="test-steps">
+                <ol>
+                    <li>确保聊天窗口中有一些对话记录（来自测试1）</li>
+                    <li>点击聊天窗口标题栏中的 🔄 重置按钮</li>
+                    <li>在确认对话框中点击"确定"</li>
+                    <li>观察聊天窗口的变化</li>
+                </ol>
+            </div>
+            <div class="expected-result">
+                <strong>预期结果：</strong>
+                <ul>
+                    <li>✅ 出现确认对话框："确定要重置会话吗？这将清除当前的对话记录。"</li>
+                    <li>✅ 重置按钮短暂变为半透明状态（视觉反馈）</li>
+                    <li>✅ 所有之前的对话记录被清除</li>
+                    <li>✅ 显示绿色系统提示："✅ 会话已成功重置，对话记录已清空"</li>
+                    <li>✅ 显示新的欢迎消息，介绍AI助手功能</li>
+                    <li>✅ 控制台输出新的Memory ID</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="test-section">
+            <div class="test-title">
+                <span class="status-indicator status-pending"></span>
+                测试 3: 会话隔离验证
+            </div>
+            <div class="test-instructions">
+                验证重置后的新会话与之前会话完全隔离
+            </div>
+            <div class="test-steps">
+                <ol>
+                    <li>在重置后的新会话中发送消息："还记得我之前问过什么吗？"</li>
+                    <li>观察AI助手的回复</li>
+                    <li>尝试询问一些只有之前会话才知道的信息</li>
+                    <li>检查浏览器控制台中的Memory ID日志</li>
+                </ol>
+            </div>
+            <div class="expected-result">
+                <strong>预期结果：</strong>
+                <ul>
+                    <li>✅ AI助手表示不记得之前的对话内容</li>
+                    <li>✅ 新会话完全独立，无法访问旧会话的上下文</li>
+                    <li>✅ 控制台显示新的唯一Memory ID</li>
+                    <li>✅ 会话重置事件被正确触发</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="test-section">
+            <div class="test-title">
+                <span class="status-indicator status-pending"></span>
+                测试 4: 页面刷新行为
+            </div>
+            <div class="test-instructions">
+                验证页面刷新后会话的行为是否符合预期
+            </div>
+            <div class="test-steps">
+                <ol>
+                    <li>在当前会话中发送一些消息</li>
+                    <li>刷新浏览器页面（F5或Ctrl+R）</li>
+                    <li>重新打开客服聊天窗口</li>
+                    <li>观察聊天记录和会话状态</li>
+                </ol>
+            </div>
+            <div class="expected-result">
+                <strong>预期结果：</strong>
+                <ul>
+                    <li>✅ 页面刷新后聊天窗口是空的（不保留之前的消息）</li>
+                    <li>✅ 显示全新的欢迎消息</li>
+                    <li>✅ 生成新的Memory ID（与刷新前不同）</li>
+                    <li>✅ 这是一个全新的独立会话</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="test-section">
+            <div class="test-title">
+                <span class="status-indicator status-pending"></span>
+                测试 5: 错误处理
+            </div>
+            <div class="test-instructions">
+                验证各种异常情况下的处理是否正确
+            </div>
+            <div class="test-steps">
+                <ol>
+                    <li>在网络断开状态下尝试发送消息</li>
+                    <li>连续快速点击重置按钮</li>
+                    <li>在消息发送过程中点击重置按钮</li>
+                    <li>检查是否有JavaScript错误</li>
+                </ol>
+            </div>
+            <div class="expected-result">
+                <strong>预期结果：</strong>
+                <ul>
+                    <li>✅ 网络错误时显示适当的错误消息</li>
+                    <li>✅ 重置按钮有防重复点击保护</li>
+                    <li>✅ 没有JavaScript控制台错误</li>
+                    <li>✅ 界面始终保持稳定</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- 引入客服组件 -->
+    <script src="js/customer-service-widget.js"></script>
+    <script>
+        // 初始化客服组件
+        document.addEventListener('DOMContentLoaded', function () {
+            const customerService = new CustomerServiceWidget({
+                apiUrl: '/ai/chat',
+                welcomeMessage: '您好！我是黑马点评智能助手，可以帮您查找店铺信息、推荐优惠券等。有什么可以帮助您的吗？'
+            });
+
+            // 监听会话重置事件
+            document.addEventListener('sessionReset', function (event) {
+                console.log('🔄 会话重置事件:', event.detail);
+                console.log('📊 测试数据:', {
+                    oldMemoryId: event.detail.oldMemoryId,
+                    newMemoryId: event.detail.newMemoryId,
+                    timestamp: new Date().toISOString()
+                });
+            });
+
+            // 提供测试辅助函数
+            window.testHelpers = {
+                // 获取当前Memory ID
+                getCurrentMemoryId: () => customerService.memoryId,
+
+                // 获取当前消息数量
+                getMessageCount: () => customerService.messages.length,
+
+                // 模拟发送测试消息
+                sendTestMessage: (message) => {
+                    const input = document.querySelector('.cs-input-container textarea');
+                    const button = document.querySelector('.cs-send-btn');
+                    if (input && button) {
+                        input.value = message;
+                        button.click();
+                    }
+                },
+
+                // 检查会话状态
+                checkSessionStatus: () => ({
+                    memoryId: customerService.memoryId,
+                    messageCount: customerService.messages.length,
+                    isWidgetOpen: customerService.chatBox.classList.contains('show')
+                })
+            };
+
+            console.log('🧪 测试辅助工具已加载，可在控制台使用 testHelpers 对象');
+            console.log('📝 示例: testHelpers.getCurrentMemoryId()');
+        });
+    </script>
+</body>
+
+</html>

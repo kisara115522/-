@@ -22,7 +22,82 @@
             this.messages = [];
             this.isLoading = false;
             
+            // 为每次页面加载生成新的会话ID
+            this.memoryId = this.generateMemoryId();
+            console.log('新会话已创建，会话ID:', this.memoryId);
+            
             this.init();
+        }
+
+        // 生成新的会话ID
+        generateMemoryId() {
+            return 'session-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9);
+        }
+
+        // 重置会话
+        resetSession() {
+            const oldMemoryId = this.memoryId;
+            this.memoryId = this.generateMemoryId();
+            this.messages = [];
+            
+            // 添加淡出效果
+            if (this.messagesContainer) {
+                this.messagesContainer.style.transition = 'opacity 0.3s ease';
+                this.messagesContainer.style.opacity = '0';
+                
+                setTimeout(() => {
+                    // 清空聊天界面的所有消息
+                    this.messagesContainer.innerHTML = '';
+                    this.messagesContainer.style.opacity = '1';
+                    
+                    // 显示重置提示
+                    this.addMessage('system', '✅ 会话已成功重置，对话记录已清空');
+                    
+                    // 添加欢迎消息
+                    setTimeout(() => {
+                        this.addMessage('assistant', '您好！我是黑马点评智能助手，可以帮您：\n• 查找店铺信息和评价\n• 推荐优惠券和活动\n• 解答平台使用问题\n\n请告诉我需要什么帮助？');
+                    }, 500);
+                }, 300);
+            }
+            
+            console.log('会话已重置，旧ID:', oldMemoryId, '新ID:', this.memoryId);
+            
+            // 触发自定义事件通知页面
+            const resetEvent = new CustomEvent('sessionReset', {
+                detail: {
+                    oldMemoryId: oldMemoryId,
+                    newMemoryId: this.memoryId
+                }
+            });
+            document.dispatchEvent(resetEvent);
+        }
+
+        // 更新消息显示（重新渲染所有消息）
+        updateMessagesDisplay() {
+            if (!this.messagesContainer) return;
+            
+            // 清空容器
+            this.messagesContainer.innerHTML = '';
+            
+            // 重新渲染所有消息
+            this.messages.forEach(message => {
+                const messageDiv = document.createElement('div');
+                messageDiv.className = `cs-message ${message.role}`;
+                
+                const bubbleDiv = document.createElement('div');
+                bubbleDiv.className = `cs-message-bubble ${message.role}`;
+                
+                if (message.isLoading) {
+                    bubbleDiv.innerHTML = '<span class="cs-loading">正在输入</span>';
+                } else {
+                    bubbleDiv.textContent = message.content;
+                }
+                
+                messageDiv.appendChild(bubbleDiv);
+                this.messagesContainer.appendChild(messageDiv);
+            });
+            
+            this.scrollToBottom();
         }
 
         init() {
@@ -148,6 +223,26 @@
                     background: rgba(255, 255, 255, 0.2);
                 }
                 
+                .cs-header-buttons {
+                    display: flex;
+                    gap: 8px;
+                }
+                
+                .cs-reset-btn {
+                    background: none;
+                    border: none;
+                    color: white;
+                    cursor: pointer;
+                    padding: 5px;
+                    border-radius: 4px;
+                    transition: background-color 0.2s;
+                    font-size: 14px;
+                }
+                
+                .cs-reset-btn:hover {
+                    background: rgba(255, 255, 255, 0.2);
+                }
+                
                 .cs-messages-container {
                     flex: 1;
                     overflow-y: auto;
@@ -177,6 +272,10 @@
                     justify-content: flex-end;
                 }
                 
+                .cs-message.system {
+                    justify-content: center;
+                }
+                
                 .cs-message-bubble {
                     max-width: 80%;
                     padding: 10px 14px;
@@ -197,6 +296,18 @@
                     color: #374151;
                     border: 1px solid #e5e7eb;
                     border-bottom-left-radius: 6px;
+                }
+                
+                .cs-message-bubble.system {
+                    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+                    color: white;
+                    border-bottom-left-radius: 6px;
+                    border-bottom-right-radius: 6px;
+                    margin: 0 auto;
+                    max-width: 80%;
+                    text-align: center;
+                    font-size: 0.9em;
+                    opacity: 0.9;
                 }
                 
                 .cs-input-area {
@@ -311,7 +422,10 @@
                         <h3>在线客服</h3>
                         <p>我们随时为您服务</p>
                     </div>
-                    <button class="cs-close-btn">✕</button>
+                    <div class="cs-header-buttons">
+                        <button class="cs-reset-btn" title="重置会话">🔄</button>
+                        <button class="cs-close-btn">✕</button>
+                    </div>
                 </div>
                 <div class="cs-messages-container"></div>
                 <div class="cs-input-area">
@@ -333,6 +447,7 @@
             this.textarea = this.chatWindow.querySelector('textarea');
             this.sendButton = this.chatWindow.querySelector('.cs-send-btn');
             this.closeButton = this.chatWindow.querySelector('.cs-close-btn');
+            this.resetButton = this.chatWindow.querySelector('.cs-reset-btn');
         }
 
         bindEvents() {
@@ -457,6 +572,23 @@
             // 关闭按钮事件
             this.closeButton.addEventListener('click', () => this.closeChat());
             
+            // 重置会话按钮事件
+            this.resetButton.addEventListener('click', () => {
+                if (confirm('确定要重置会话吗？这将清除当前的对话记录。')) {
+                    // 添加视觉反馈
+                    this.resetButton.style.opacity = '0.5';
+                    this.resetButton.disabled = true;
+                    
+                    this.resetSession();
+                    
+                    // 恢复按钮状态
+                    setTimeout(() => {
+                        this.resetButton.style.opacity = '1';
+                        this.resetButton.disabled = false;
+                    }, 1000);
+                }
+            });
+            
             // 发送按钮事件
             this.sendButton.addEventListener('click', () => this.sendMessage());
             
@@ -542,14 +674,8 @@
             this.sendButton.disabled = true;
             
             try {
-                // 生成或获取用户会话ID
-                let memoryId = localStorage.getItem('customer-service-memory-id');
-                if (!memoryId) {
-                    memoryId = 'user-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9);
-                    localStorage.setItem('customer-service-memory-id', memoryId);
-                }
-                
-                const response = await fetch(`${this.options.apiUrl}?message=${encodeURIComponent(message)}&memoryId=${encodeURIComponent(memoryId)}`);
+                // 使用当前会话的memoryId
+                const response = await fetch(`${this.options.apiUrl}?message=${encodeURIComponent(message)}&memoryId=${encodeURIComponent(this.memoryId)}`);
                 
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
@@ -622,15 +748,15 @@
     // 自动初始化（如果页面加载完成）
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', () => {
-            if (!window.customerService) {
-                window.customerService = new CustomerServiceWidget({
+            if (!window.customerServiceWidget) {
+                window.customerServiceWidget = new CustomerServiceWidget({
                     welcomeMessage: '您好！欢迎来到黑马点评，有什么可以帮助您的吗？'
                 });
             }
         });
     } else {
-        if (!window.customerService) {
-            window.customerService = new CustomerServiceWidget({
+        if (!window.customerServiceWidget) {
+            window.customerServiceWidget = new CustomerServiceWidget({
                 welcomeMessage: '您好！欢迎来到黑马点评，有什么可以帮助您的吗？'
             });
         }

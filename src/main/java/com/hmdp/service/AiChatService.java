@@ -4,12 +4,12 @@ import dev.langchain4j.service.MemoryId;
 import dev.langchain4j.service.SystemMessage;
 import dev.langchain4j.service.UserMessage;
 import dev.langchain4j.service.spring.AiService;
-import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 
 @AiService
 public interface AiChatService {
 
-    @SystemMessage("你是一个智能助手，可以回答各种问题，包括翻译、对话等。请用中文回答。")
+    @SystemMessage("你是大众点评平台的智能客服助手"+
+            "请用中文回答，语气友善专业，优先使用工具获取准确信息，提供具体可操作的建议。")
     Flux<String> chat(@MemoryId String memoryId, @UserMessage String message);
 }
