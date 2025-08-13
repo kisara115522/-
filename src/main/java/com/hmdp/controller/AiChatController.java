@@ -14,9 +14,9 @@ public class AiChatController {
     @Autowired
     private AiChatService aiChatService;
 
-    @GetMapping(value = "/chat",produces = "text/html;charset=utf-8")
-    public Flux<String> chat(String message) {
-        Flux<String> result = aiChatService.chat(message);
+    @RequestMapping(value = "/chat",produces = "text/html;charset=utf-8")
+    public Flux<String> chat(String memoryId,String message) {
+        Flux<String> result = aiChatService.chat(memoryId,message);
         return result;
 
     }

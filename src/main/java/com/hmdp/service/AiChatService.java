@@ -11,5 +11,5 @@ import reactor.core.publisher.Flux;
 public interface AiChatService {
 
     //@SystemMessage()
-    public Flux<String> chat(@UserMessage String message);
+    public Flux<String> chat(@MemoryId String memortyId,@UserMessage String message);
 }
