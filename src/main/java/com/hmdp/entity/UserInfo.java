@@ -39,7 +39,7 @@ public class UserInfo implements Serializable {
     private String city;
 
     /**
-     * 个人介绍，不要超过128个字符
+     * 个人介绍，不要超�?28个字�?
      */
     private String introduce;
 
@@ -49,12 +49,12 @@ public class UserInfo implements Serializable {
     private Integer fans;
 
     /**
-     * 关注的人的数量
+     * 关注的人的数�?
      */
     private Integer followee;
 
     /**
-     * 性别，0：男，1：女
+     * 性别�?：男�?：女
      */
     private Boolean gender;
 
@@ -69,7 +69,7 @@ public class UserInfo implements Serializable {
     private Integer credits;
 
     /**
-     * 会员级别，0~9级,0代表未开通会员
+     * 会员级别�?~9�?0代表未开通会�?
      */
     private Boolean level;
 

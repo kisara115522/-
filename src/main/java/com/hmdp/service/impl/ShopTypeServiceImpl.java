@@ -11,7 +11,7 @@ import com.hmdp.utils.RedisConstants;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Resource;
+import jakarta.annotation.Resource;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -33,7 +33,7 @@ public class ShopTypeServiceImpl extends ServiceImpl<ShopTypeMapper, ShopType> i
             List<ShopType> shopList = JSONUtil.toList(shopTypestr, ShopType.class);
             return Result.ok(shopList);
         }
-        //查询数据库
+        //查询数据�?
         List<ShopType> typeList = query().orderByAsc("sort").list();
         if (typeList == null) {
             return Result.fail("信息错误");

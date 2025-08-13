@@ -19,8 +19,8 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import javax.annotation.Resource;
-import javax.servlet.http.HttpSession;
+import jakarta.annotation.Resource;
+import jakarta.servlet.http.HttpSession;
 import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -45,9 +45,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     public Result sendCode(String phone, HttpSession session) {
         //用自定义工具类正则校验手机号是否合法
         if (RegexUtils.isPhoneInvalid(phone)) {
-            return Result.fail("手机号格式不对");
+            return Result.fail("手机号格式不正确");
         }
-        //生成验证码
+        //生成验证�?
         String code = RandomUtil.randomNumbers(6);
 
         //保存验证码到redis
@@ -61,21 +61,21 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
 
     /**
      * 登录功能
-     * @param loginForm 登录参数，包含手机号、验证码；或者手机号、密码
+     * @param loginForm 登录参数，包含手机号、验证码；或者手机号、密�?
      */
     public Result login(LoginFormDTO loginForm, HttpSession session) {
         String phone = loginForm.getPhone();
         String code = loginForm.getCode();
-        //校验手机号
+        //校验手机�?
         if (RegexUtils.isPhoneInvalid(phone)) {
             return Result.fail("手机号格式不对");
         }
-        //校验验证码
+        //校验验证�?
         String cacheCode = stringRedisTemplate.opsForValue().get(LOGIN_CODE_KEY+phone);
         if(cacheCode==null||!cacheCode.equals(code)){
             return Result.fail("验证码错误");
         }
-        //根据手机号去数据库查询用户
+        //根据手机号去数据库查询用�?
         User user = query().eq("phone", phone).one();
         if (user == null) {
             //无用户，自动注册

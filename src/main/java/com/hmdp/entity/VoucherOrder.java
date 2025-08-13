@@ -43,12 +43,12 @@ public class VoucherOrder implements Serializable {
     private Long voucherId;
 
     /**
-     * 支付方式 1：余额支付；2：支付宝；3：微信
+     * 支付方式 1：余额支付；2：支付宝�?：微�?
      */
     private Integer payType;
 
     /**
-     * 订单状态，1：未支付；2：已支付；3：已核销；4：已取消；5：退款中；6：已退款
+     * 订单状态，1：未支付�?：已支付�?：已核销�?：已取消�?：退款中�?：已退�?
      */
     private Integer status;
 
@@ -68,7 +68,7 @@ public class VoucherOrder implements Serializable {
     private LocalDateTime useTime;
 
     /**
-     * 退款时间
+     * 退款时�?
      */
     private LocalDateTime refundTime;
 

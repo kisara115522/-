@@ -62,12 +62,12 @@ public class Blog implements Serializable {
     private String title;
 
     /**
-     * 探店的照片，最多9张，多张以","隔开
+     * 探店的照片，最�?张，多张�?,"隔开
      */
     private String images;
 
     /**
-     * 探店的文字描述
+     * 探店的文字描�?
      */
     private String content;
 

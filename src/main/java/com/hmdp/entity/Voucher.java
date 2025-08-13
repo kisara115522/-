@@ -39,12 +39,12 @@ public class Voucher implements Serializable {
     private Long shopId;
 
     /**
-     * 代金券标题
+     * 代金券标�?
      */
     private String title;
 
     /**
-     * 副标题
+     * 副标�?
      */
     private String subTitle;
 
@@ -64,12 +64,12 @@ public class Voucher implements Serializable {
     private Long actualValue;
 
     /**
-     * 优惠券类型
+     * 优惠券类�?
      */
     private Integer type;
 
     /**
-     * 优惠券类型
+     * 优惠券类�?
      */
     private Integer status;
     /**

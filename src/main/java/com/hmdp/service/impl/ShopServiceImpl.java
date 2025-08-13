@@ -14,7 +14,7 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.annotation.Resource;
+import jakarta.annotation.Resource;
 
 import java.util.SortedSet;
 import java.util.concurrent.TimeUnit;
@@ -33,11 +33,11 @@ public class ShopServiceImpl extends ServiceImpl<ShopMapper, Shop> implements IS
 
     public Result queryById(Long id) {
 //        缓存穿透的解决
-        //lamda表达式可以简写为this::getById；
+        //lamda表达式可以简写为this::getById�?
         Shop shop = cacheClient.queryWithPassThrough(CACHE_SHOP_KEY,id,Shop.class,
                 id2->getById(id2),CACHE_SHOP_TTL,TimeUnit.MINUTES);
 
-        //互斥锁解决缓存击穿
+        //互斥锁解决缓存击�?
 //        Shop shop = queryWithMutex(id);
         if (shop == null) {
             return Result.fail("店铺不存在");
@@ -46,7 +46,7 @@ public class ShopServiceImpl extends ServiceImpl<ShopMapper, Shop> implements IS
         return Result.ok(shop);
     }
 
-    //互斥锁实现
+    //互斥锁实�?
     public Shop queryWithMutex(Long id){
         //1. 根据id查redis
         String shopJson = stringRedisTemplate.opsForValue().get(CACHE_SHOP_KEY + id);
@@ -57,13 +57,13 @@ public class ShopServiceImpl extends ServiceImpl<ShopMapper, Shop> implements IS
             return shop;
         }
 
-        //先判断是否是空字符串，是的话代表是缓存击穿
-        //null “” \t\n返回false  所以判断不为null就是“”
+        //先判断是否是空字符串，是的话代表是缓存击�?
+        //null “�?\t\n返回false  所以判断不为null就是“�?
         if (shopJson != null) {
             return null;
         }
         //4.实现缓存重建
-        //4.1 获取互斥锁
+        //4.1 获取互斥�?
         String lockKey= null;
         Shop shopValue = null;
         try {
@@ -72,18 +72,18 @@ public class ShopServiceImpl extends ServiceImpl<ShopMapper, Shop> implements IS
 
             //4.2判断是否获取成功
             if (!isLock) {
-                //4.3 失败则休眠重试
+                //4.3 失败则休眠重�?
                 Thread.sleep(50);
                 queryWithMutex(id);
             }
 
-            //4.4 成功 ，就根据id查询数据库
+            //4.4 成功 ，就根据id查询数据�?
             shopValue = getById(id);
-            //TODO：模拟重建延迟
+            //TODO：模拟重建延�?
             Thread.sleep(200);
             if (shopValue == null) {
-                //5.不存在返回错误
-                //用存空值解决缓存击穿
+                //5.不存在返回错�?
+                //用存空值解决缓存击�?
                 stringRedisTemplate.opsForValue().set(CACHE_SHOP_KEY+id,
                         "",CACHE_NULL_TTL, TimeUnit.MINUTES);
 
@@ -96,7 +96,7 @@ public class ShopServiceImpl extends ServiceImpl<ShopMapper, Shop> implements IS
             throw new RuntimeException(e);
         }
         finally {
-            //7.释放互斥锁
+            //7.释放互斥�?
             unLock(lockKey);
         }
         //8.返回
@@ -114,8 +114,8 @@ public class ShopServiceImpl extends ServiceImpl<ShopMapper, Shop> implements IS
             return shop;
         }
 
-        //先判断是否是空字符串，是的话代表是缓存击穿
-        //null “” \t\n返回false  所以判断不为null就是“”
+        //先判断是否是空字符串，是的话代表是缓存击�?
+        //null “�?\t\n返回false  所以判断不为null就是“�?
         if (shopJson != null) {
             return null;
         }
@@ -123,8 +123,8 @@ public class ShopServiceImpl extends ServiceImpl<ShopMapper, Shop> implements IS
         Shop shopValue = getById(id);
 
         if (shopValue == null) {
-            //5.不存在返回错误
-            //用存空值解决缓存击穿
+            //5.不存在返回错�?
+            //用存空值解决缓存击�?
             stringRedisTemplate.opsForValue().set(CACHE_SHOP_KEY+id,
                     "",CACHE_NULL_TTL, TimeUnit.MINUTES);
 
@@ -133,7 +133,7 @@ public class ShopServiceImpl extends ServiceImpl<ShopMapper, Shop> implements IS
         //6。存在，写入redis
         stringRedisTemplate.opsForValue().set(CACHE_SHOP_KEY+id,
                 JSONUtil.toJsonPrettyStr(shopValue),CACHE_SHOP_TTL, TimeUnit.MINUTES);
-        //7。返回
+        //7。返�?
         return shopValue;
     }
 
@@ -145,7 +145,7 @@ public class ShopServiceImpl extends ServiceImpl<ShopMapper, Shop> implements IS
         return BooleanUtil.isTrue(aBoolean);
     }
 
-    //释放锁就是把这个key从redis里删除，这样其他线程就可以获取到这个锁
+    //释放锁就是把这个key从redis里删除，这样其他线程就可以获取到这个�?
     private void unLock(String key){
         stringRedisTemplate.delete(key);
     }

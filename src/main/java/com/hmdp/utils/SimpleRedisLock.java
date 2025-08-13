@@ -6,7 +6,7 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.script.DefaultRedisScript;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.Resource;
+import jakarta.annotation.Resource;
 import java.security.Key;
 import java.util.Collections;
 import java.util.concurrent.TimeUnit;
@@ -35,13 +35,13 @@ public class SimpleRedisLock implements ILock{
     @Override
     public boolean tryLock(long timeoutSec) {
         String threadId=ID_PREFIX+ Thread.currentThread().getId();
-        //获取锁
+        //获取�?
         Boolean success = stringRedisTemplate.opsForValue()
                 .setIfAbsent(KEY_PREFIX + name, threadId, timeoutSec, TimeUnit.SECONDS);
         return Boolean.TRUE.equals(success);
     }
 
-    //基于lua脚本来编写锁释放代码，实现多个操作原子性
+    //基于lua脚本来编写锁释放代码，实现多个操作原子�?
     @Override
     public void unlock() {
         stringRedisTemplate.execute(UNLOCK_SCRIPT,

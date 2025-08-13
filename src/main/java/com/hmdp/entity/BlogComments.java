@@ -43,7 +43,7 @@ public class BlogComments implements Serializable {
     private Long blogId;
 
     /**
-     * 关联的1级评论id，如果是一级评论，则值为0
+     * 关联�?级评论id，如果是一级评论，则值为0
      */
     private Long parentId;
 
@@ -53,17 +53,17 @@ public class BlogComments implements Serializable {
     private Long answerId;
 
     /**
-     * 回复的内容
+     * 回复的内�?
      */
     private String content;
 
     /**
-     * 点赞数
+     * 点赞�?
      */
     private Integer liked;
 
     /**
-     * 状态，0：正常，1：被举报，2：禁止查看
+     * 状态，0：正常，1：被举报�?：禁止查�?
      */
     private Boolean status;
 

@@ -74,7 +74,7 @@ public class Shop implements Serializable {
     private Long avgPrice;
 
     /**
-     * 销量
+     * 销�?
      */
     private Integer sold;
 
@@ -84,12 +84,12 @@ public class Shop implements Serializable {
     private Integer comments;
 
     /**
-     * 评分，1~5分，乘10保存，避免小数
+     * 评分�?~5分，�?0保存，避免小�?
      */
     private Integer score;
 
     /**
-     * 营业时间，例如 10:00-22:00
+     * 营业时间，例�?10:00-22:00
      */
     private String openHours;
 

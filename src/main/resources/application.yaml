@@ -1,28 +1,63 @@
 server:
-  port: 8081
+  port: 8080
+
 spring:
   application:
     name: hmdp
+  
   datasource:
-    driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://127.0.0.1:3306/redis?useSSL=false&serverTimezone=UTC
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/redis?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
     username: root
     password: Xu821120
-  redis:
-    host: localhost
-    port: 6379
-    #assword: 123321
-    lettuce:
-      pool:
-        max-active: 10
-        max-idle: 10
-        min-idle: 1
-        time-between-eviction-runs: 10s
-    database: 1
+    hikari:
+      maximum-pool-size: 10
+      minimum-idle: 5
+  
+  data:
+    redis:
+      host: localhost
+      port: 6379
+      #password: 123321
+      lettuce:
+        pool:
+          max-active: 10
+          max-idle: 10
+          min-idle: 1
+          time-between-eviction-runs: 10s
+  
   jackson:
     default-property-inclusion: non_null # JSON处理时忽略非空字段
+    serialization:
+      write-dates-as-timestamps: false
+
 mybatis-plus:
   type-aliases-package: com.hmdp.entity # 别名扫描包
+  configuration:
+    map-underscore-to-camel-case: true
+    
 logging:
   level:
     com.hmdp: debug
+
+langchain4j:
+  open-ai:
+    chat-model:
+      base-url: https://api.siliconflow.cn/v1
+      api-key: ${SILICON_API_KEY}
+      model-name: Qwen/Qwen3-8B
+      log-requests: true
+      log-responses: true
+    streaming-chat-model:
+      base-url: https://api.siliconflow.cn/v1
+      api-key: ${SILICON_API_KEY}
+      model-name: Qwen/Qwen3-8B
+      log-requests: true
+      log-responses: true
+      timeout: PT1M
+    embedding-model:
+      base-url: https://api.siliconflow.cn/v1
+      api-key: ${SILICON_API_KEY}
+      model-name: BAAI/bge-m3
+      log-requests: true
+      log-responses: true

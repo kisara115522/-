@@ -38,7 +38,7 @@ public class User implements Serializable {
     private String phone;
 
     /**
-     * 密码，加密存储
+     * 密码，加密存�?
      */
     private String password;
 

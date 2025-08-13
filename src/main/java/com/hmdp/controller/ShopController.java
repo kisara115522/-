@@ -9,7 +9,7 @@ import com.hmdp.service.IShopService;
 import com.hmdp.utils.SystemConstants;
 import org.springframework.web.bind.annotation.*;
 
-import javax.annotation.Resource;
+import jakarta.annotation.Resource;
 
 
 @RestController
@@ -36,7 +36,7 @@ public class ShopController {
      */
     @PostMapping
     public Result saveShop(@RequestBody Shop shop) {
-        // 写入数据库
+        // 写入数据�?
         shopService.save(shop);
         // 返回店铺id
         return Result.ok(shop.getId());
@@ -45,7 +45,7 @@ public class ShopController {
     /**
      * 更新商铺信息
      * @param shop 商铺数据
-     * @return 无
+     * @return �?
      */
     @PutMapping
     public Result updateShop(@RequestBody Shop shop) {
@@ -73,8 +73,8 @@ public class ShopController {
     }
 
     /**
-     * 根据商铺名称关键字分页查询商铺信息
-     * @param name 商铺名称关键字
+     * 根据商铺名称关键字分页查询商铺信�?
+     * @param name 商铺名称关键�?
      * @param current 页码
      * @return 商铺列表
      */

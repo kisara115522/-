@@ -5,7 +5,7 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.Resource;
+import jakarta.annotation.Resource;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
@@ -21,11 +21,11 @@ public class RedisIdWorker {
 
     public long nextId(String keyPrefix){
 
-        //1.时间戳
+        //1.时间�?
         LocalDateTime now = LocalDateTime.now();
         long nowSecond = now.toEpochSecond(ZoneOffset.UTC);
         long timeStamp = nowSecond - BEGIN_TIMESTAMP;
-        //2.序列号
+        //2.序列�?
         String date = now.format(DateTimeFormatter.ofPattern("yyyy:MM:dd"));
         long count = stringRedisTemplate.opsForValue().increment("icr" + keyPrefix + ":" + date);
         //3.拼接

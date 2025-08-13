@@ -38,7 +38,7 @@ public class UploadController {
     public Result deleteBlogImg(@RequestParam("name") String filename) {
         File file = new File(SystemConstants.IMAGE_UPLOAD_DIR, filename);
         if (file.isDirectory()) {
-            return Result.fail("错误的文件名称");
+            return Result.fail("错误的文件名");
         }
         FileUtil.del(file);
         return Result.ok();
@@ -57,7 +57,7 @@ public class UploadController {
         if (!dir.exists()) {
             dir.mkdirs();
         }
-        // 生成文件名
+        // 生成文件�?
         return StrUtil.format("/blogs/{}/{}/{}.{}", d1, d2, name, suffix);
     }
 }

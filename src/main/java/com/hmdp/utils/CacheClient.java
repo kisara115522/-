@@ -13,7 +13,7 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Resource;
+import jakarta.annotation.Resource;
 import java.nio.channels.Pipe;
 import java.time.LocalDateTime;
 import java.util.concurrent.TimeUnit;
@@ -49,8 +49,8 @@ public class CacheClient {
             return JSONUtil.toBean(json,type);
         }
 
-        //先判断是否是空字符串，是的话代表是缓存穿透
-        //null “” \t\n返回false  所以判断不为null就是“”
+        //先判断是否是空字符串，是的话代表是缓存穿�?
+        //null “�?\t\n返回false  所以判断不为null就是“�?
         if (json != null) {
             return null;
         }
@@ -58,8 +58,8 @@ public class CacheClient {
         R r=dbFallBack.apply(id);
 
         if (r == null) {
-            //5.不存在返回错误
-            //用存空值解决缓存穿透
+            //5.不存在返回错�?
+            //用存空值解决缓存穿�?
             stringRedisTemplate.opsForValue().set(CACHE_SHOP_KEY+id,
                     "",CACHE_NULL_TTL, TimeUnit.MINUTES);
 
@@ -67,7 +67,7 @@ public class CacheClient {
         }
         //6。存在，写入redis
         this.set(key,r,time,unit);
-        //7。返回
+        //7。返�?
         return r;
     }
 }
